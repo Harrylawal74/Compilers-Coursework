@@ -48,7 +48,7 @@ binop
     | Div             #DivBinop
     |And              #AndBinop
     |Or               #OrBinop
-    |Exponent         #ExponentBinop
+    |XOR         #ExponentBinop
 ;
 
 LParen : '(' ;
@@ -68,7 +68,6 @@ Plus : '+' ;
 Times : '*' ;
 Minus : '-' ;
 Div : '/' ;
-Exponent : '^' ;
 
 Assign : ':=' ;
 
@@ -80,6 +79,7 @@ Then : 'then' ;
 Else : 'else' ;
 And : '&' ;
 Or : '|' ;
+XOR : '^' ;
 
 IntType : 'int' ;
 BoolType : 'bool' ;
