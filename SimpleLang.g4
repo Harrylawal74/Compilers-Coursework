@@ -19,18 +19,18 @@ body
 ;
 
 block
-    : LBrace ene+=exp (Semicolon ene+=exp)* RBrace
+    : LBrace ene+=exp ((Semicolon)? ene+=exp)* RBrace
 ;
 
 exp
     : Idfr Assign exp                                       #AssignExpr
     | LParen exp binop exp RParen                           #BinOpExpr
-    | Idfr LParen (args+=exp (Comma args+=exp)*)? RParen    #InvokeExpr
+    | Idfr LParen (args+=exp (binop) ((Comma)? args+=exp)*)? RParen Idfr (body)?    #InvokeExpr
     | block                                                 #BlockExpr
     | If exp Then block Else block                          #IfExpr
     | Print exp                                             #PrintExpr
     | Space                                                 #SpaceExpr
-    | Idfr                                                  #IdExpr
+    | Idfr                                                #IdExpr
     | IntLit                                                #IntExpr
 ;
 
@@ -39,10 +39,16 @@ exp
 binop
     : Eq              #EqBinop
     | Less            #LessBinop
+    | More            #MoreBinop
     | LessEq          #LessEqBinop
+    | MoreEq          #LessEqBinop
     | Plus            #PlusBinop
     | Minus           #MinusBinop
     | Times           #TimesBinop
+    | Div             #DivBinop
+    |And              #AndBinop
+    |Or               #OrBinop
+    |Exponent         #ExponentBinop
 ;
 
 LParen : '(' ;
@@ -53,12 +59,16 @@ Semicolon : ';' ;
 RBrace : '}' ;
 
 Eq : '==' ;
+More : '>' ;
+MoreEq : '>=' ;
 Less : '<' ;
 LessEq : '<=' ;
 
 Plus : '+' ;
 Times : '*' ;
 Minus : '-' ;
+Div : '/' ;
+Exponent : '^' ;
 
 Assign : ':=' ;
 
@@ -68,6 +78,8 @@ NewLine : 'newline' ;
 If : 'if' ;
 Then : 'then' ;
 Else : 'else' ;
+And : '&' ;
+Or : '|' ;
 
 IntType : 'int' ;
 BoolType : 'bool' ;
