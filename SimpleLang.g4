@@ -16,6 +16,7 @@ type
 
 body
     : LBrace ene+=exp (Semicolon ene+=exp)* RBrace
+
 ;
 
 block
@@ -23,15 +24,19 @@ block
 ;
 
 exp
-    : Idfr Assign exp                                       #AssignExpr
-    | LParen exp binop exp RParen                           #BinOpExpr
+    : (typed_idfr | Idfr) Assign exp                                       #AssignExpr
+    | LParen exp binop exp RParen                         #BinOpExpr
     | Idfr LParen (args+=exp (binop) ((Comma)? args+=exp)*)? RParen Idfr (body)?    #InvokeExpr
     | block                                                 #BlockExpr
     | If exp Then block Else block                          #IfExpr
+    | While (LParen exp (binop exp)? RParen Do block)                       #WhileExpr
+    | Repeat block Until exp                                #RepeatExpr
     | Print exp                                             #PrintExpr
     | Space                                                 #SpaceExpr
-    | Idfr                                                #IdExpr
+    |NewLine                                                #NewLineExpr
+    | Idfr (LParen exp ((Comma exp)*)? RParen)?                                          #IdExpr
     | IntLit                                                #IntExpr
+    |BoolLit                                                #BoolExpr
 ;
 
 
@@ -77,6 +82,10 @@ NewLine : 'newline' ;
 If : 'if' ;
 Then : 'then' ;
 Else : 'else' ;
+While : 'while' ;
+Repeat : 'repeat' ;
+Until : 'until' ;
+Do : 'do' ;
 And : '&' ;
 Or : '|' ;
 XOR : '^' ;
